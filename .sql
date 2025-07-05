@@ -48,12 +48,3 @@ CREATE TABLE IF NOT EXISTS commentaires (
     FOREIGN KEY (livre_id) REFERENCES livres(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
--- 6. Insertion de l’administrateur (mot de passe = admin123, hashé)
-INSERT INTO utilisateurs (nom, prenom, email, mot_de_passe, role)
-VALUES (
-    'OUEDRAOGO',
-    'Freddy',
-    'freddyouedraogo@gmail.com',
-    '$2b$10$wH8QwQwQwQwQwQwQwQwQOeQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQwQw', -- hash de admin123
-    'admin'
-);

@@ -57,7 +57,7 @@ apiRoutes.get('/users', verifyToken, findAllUsers);
 // Supprimer un utilisateur (admin seulement)
 apiRoutes.delete('/users/:id', verifyToken, async (req, res) => {
   try {
-    if (req.user.role !== 'admin') {
+    if (req.currUser.role !== 'admin') {
       return res.status(403).json({ error: true, message: "Accès refusé." });
     }
     const id = parseInt(req.params.id);
@@ -72,8 +72,8 @@ apiRoutes.delete('/users/:id', verifyToken, async (req, res) => {
 // Modifier le rôle d'un utilisateur (admin seulement)
 apiRoutes.patch('/users/:id', verifyToken, async (req, res) => {
   try {
-    console.log('PATCH /users/:id', { user: req.user, params: req.params, body: req.body });
-    if (req.user.role !== 'admin') {
+    console.log('PATCH /users/:id', { user: req.currUser, params: req.params, body: req.body });
+    if (req.currUser.role !== 'admin') {
       return res.status(403).json({ error: true, message: "Accès refusé." });
     }
     const id = parseInt(req.params.id);
