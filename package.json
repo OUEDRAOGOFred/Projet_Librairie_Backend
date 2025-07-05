@@ -6,6 +6,7 @@
     "dev": "nodemon server.js",
     "build": "npx prisma generate",
     "migrate": "node prisma/migrate.js",
+    "add-books": "node addBooksWithPrisma.js",
     "postinstall": "npx prisma generate"
   },
   "dependencies": {
