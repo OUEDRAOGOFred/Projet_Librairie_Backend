@@ -2,7 +2,7 @@
   "name": "Api2ie",
   "version": "0.0.1",
   "scripts": {
-    "start": "node server.js",
+    "start": "bash start.sh",
     "dev": "nodemon server.js",
     "build": "npx prisma generate",
     "migrate": "node prisma/migrate.js",
