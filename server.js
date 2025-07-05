@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const { PrismaClient } = require('@prisma/client');
 
 const verifyToken = require('./middleware/verifyToken');
 const addNewUser = require('./middleware/addNewUser');
@@ -12,10 +13,12 @@ const empruntsRoutes = require('./middleware/emprunts');
 const commentairesRoutes = require('./middleware/commentaires');
 const adminRoutes = require('./middleware/admin');
 const livresRoutes = require('./middleware/livres');
+const findAllUsers = require('./middleware/findAllUsers');
 
 const port = process.env.PORT || 4400;
 
 const app = express();
+const prisma = new PrismaClient();
 
 // Middleware for all routes
 app.use(cors());
@@ -46,6 +49,40 @@ apiRoutes.use(verifyToken);
 // apiRoutes.get('/Utilisateur/:user_id', Utilisateur); // Replace UserOne with Utilisateur for consistency
 apiRoutes.get('/welcome', (req, res) => {
   res.json({ message: "Bienvenue sur l'API sécurisée !" });
+});
+
+// Endpoint pour récupérer tous les utilisateurs (admin seulement)
+apiRoutes.get('/users', findAllUsers);
+
+// Supprimer un utilisateur (admin seulement)
+apiRoutes.delete('/users/:id', async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: true, message: "Accès refusé." });
+    }
+    const id = parseInt(req.params.id);
+    if (!id) return res.status(400).json({ error: true, message: "ID manquant" });
+    await prisma.utilisateur.delete({ where: { id } });
+    res.json({ message: 'Utilisateur supprimé' });
+  } catch (error) {
+    res.status(500).json({ error: true, message: error.message });
+  }
+});
+
+// Modifier le rôle d'un utilisateur (admin seulement)
+apiRoutes.patch('/users/:id', async (req, res) => {
+  try {
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ error: true, message: "Accès refusé." });
+    }
+    const id = parseInt(req.params.id);
+    const { role } = req.body;
+    if (!id || !role) return res.status(400).json({ error: true, message: "ID ou rôle manquant" });
+    await prisma.utilisateur.update({ where: { id }, data: { role } });
+    res.json({ message: 'Rôle modifié' });
+  } catch (error) {
+    res.status(500).json({ error: true, message: error.message });
+  }
 });
 
 app.use('/api', apiRoutes);

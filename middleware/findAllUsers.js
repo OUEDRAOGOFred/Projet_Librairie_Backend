@@ -3,10 +3,35 @@ const prisma = new PrismaClient();
 
 const findAllUsers = async (req, res) => {
   try {
-    const users = await prisma.utilisateur.findMany();
-    res.json({ "Error": false, "Message": "Success", "Users": users });
+    // Vérifier que l'utilisateur est admin
+    if (req.user.role !== 'admin') {
+      return res.status(403).json({ 
+        error: true, 
+        message: "Accès refusé. Seuls les administrateurs peuvent voir la liste des utilisateurs." 
+      });
+    }
+
+    const users = await prisma.utilisateur.findMany({
+      select: {
+        id: true,
+        nom: true,
+        prenom: true,
+        email: true,
+        role: true,
+        created_at: true
+      },
+      orderBy: {
+        created_at: 'desc'
+      }
+    });
+
+    res.json(users);
 } catch (error) {
-    res.json({ "Error": true, "Message": error.message });
+    console.error('Erreur lors de la récupération des utilisateurs:', error);
+    res.status(500).json({ 
+      error: true, 
+      message: "Erreur lors de la récupération des utilisateurs" 
+    });
 }
 };
 
