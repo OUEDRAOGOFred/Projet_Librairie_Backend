@@ -12,4 +12,4 @@ npx prisma db push --accept-data-loss
 
 # Démarrer l'application
 echo "✅ Démarrage du serveur..."
-npm start 
+node server.js 
