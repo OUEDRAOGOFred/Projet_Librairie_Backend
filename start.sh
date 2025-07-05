@@ -10,6 +10,10 @@ npx prisma generate
 echo "🗄️ Migration de la base de données..."
 npx prisma db push --accept-data-loss
 
+# Créer l'administrateur s'il n'existe pas
+echo "👤 Vérification de l'administrateur..."
+node createAdmin.js
+
 # Ajouter des livres de test si la base est vide
 echo "📚 Vérification des livres dans la base..."
 BOOK_COUNT=$(node -e "const { PrismaClient } = require('@prisma/client'); const prisma = new PrismaClient(); prisma.livre.count().then(count => { console.log(count); prisma.\$disconnect(); }).catch(() => { console.log('0'); prisma.\$disconnect(); });")
