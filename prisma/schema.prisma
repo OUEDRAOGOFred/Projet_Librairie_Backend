@@ -47,6 +47,7 @@ model Emprunt {
   livre          Livre         @relation(fields: [livre_id], references: [id], onDelete: Cascade)
   livre_id       Int
   date_emprunt   DateTime      @default(now())
+  date_retour_prevue DateTime?
   date_retour    DateTime?
   rendu          Boolean       @default(false)
 

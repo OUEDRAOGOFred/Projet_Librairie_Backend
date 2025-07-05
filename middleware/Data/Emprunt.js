@@ -11,11 +11,14 @@ const Emprunt = {
         return callback(null, { error: 'Livre indisponible' });
       }
       // Créer l'emprunt (date_limite = date_emprunt + 14 jours)
+      const now = new Date();
+      const date_retour_prevue = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
       const emprunt = await prisma.emprunt.create({
         data: {
           utilisateur_id: Number(utilisateur_id),
           livre_id: Number(livre_id),
-          // Prisma ne gère pas date_limite, donc on ne l'ajoute pas ici
+          date_emprunt: now,
+          date_retour_prevue: date_retour_prevue
         }
       });
       // Mettre à jour la disponibilité du livre
