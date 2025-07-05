@@ -3,8 +3,9 @@ const prisma = new PrismaClient();
 
 const findAllUsers = async (req, res) => {
   try {
+    console.log('findAllUsers - req.user:', req.user);
     // Vérifier que l'utilisateur est admin
-    if (req.user.role !== 'admin') {
+    if (!req.user || req.user.role !== 'admin') {
       return res.status(403).json({ 
         error: true, 
         message: "Accès refusé. Seuls les administrateurs peuvent voir la liste des utilisateurs." 

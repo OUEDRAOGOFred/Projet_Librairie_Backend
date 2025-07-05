@@ -72,6 +72,7 @@ apiRoutes.delete('/users/:id', verifyToken, async (req, res) => {
 // Modifier le rôle d'un utilisateur (admin seulement)
 apiRoutes.patch('/users/:id', verifyToken, async (req, res) => {
   try {
+    console.log('PATCH /users/:id', { user: req.user, params: req.params, body: req.body });
     if (req.user.role !== 'admin') {
       return res.status(403).json({ error: true, message: "Accès refusé." });
     }
