@@ -52,10 +52,10 @@ apiRoutes.get('/welcome', (req, res) => {
 });
 
 // Endpoint pour récupérer tous les utilisateurs (admin seulement)
-apiRoutes.get('/users', findAllUsers);
+apiRoutes.get('/users', verifyToken, findAllUsers);
 
 // Supprimer un utilisateur (admin seulement)
-apiRoutes.delete('/users/:id', async (req, res) => {
+apiRoutes.delete('/users/:id', verifyToken, async (req, res) => {
   try {
     if (req.user.role !== 'admin') {
       return res.status(403).json({ error: true, message: "Accès refusé." });
@@ -70,7 +70,7 @@ apiRoutes.delete('/users/:id', async (req, res) => {
 });
 
 // Modifier le rôle d'un utilisateur (admin seulement)
-apiRoutes.patch('/users/:id', async (req, res) => {
+apiRoutes.patch('/users/:id', verifyToken, async (req, res) => {
   try {
     if (req.user.role !== 'admin') {
       return res.status(403).json({ error: true, message: "Accès refusé." });

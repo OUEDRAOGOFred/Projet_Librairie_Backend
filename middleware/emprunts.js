@@ -40,12 +40,18 @@ router.get('/mes', verifyToken, (req, res) => {
   }
   Emprunt.getByUser(utilisateur_id, (err, result) => {
     if (err) return res.status(500).json({ message: 'Erreur serveur', err });
-    // On ajoute le champ date_limite (date_emprunt + 14 jours)
-    const empruntsWithLimite = result.map(e => ({
-      ...e,
+    // On aplatit les infos du livre pour chaque emprunt
+    const empruntsWithInfos = result.map(e => ({
+      id: e.id,
+      livre_titre: e.livre ? e.livre.titre : '-',
+      livre_auteur: e.livre ? e.livre.auteur : '-',
+      date_emprunt: e.date_emprunt,
+      date_retour_prevue: e.date_retour_prevue,
+      retourne: e.rendu,
+      date_retour: e.date_retour,
       date_limite: e.date_emprunt ? new Date(new Date(e.date_emprunt).getTime() + 14 * 24 * 60 * 60 * 1000) : null
     }));
-    res.json(empruntsWithLimite);
+    res.json(empruntsWithInfos);
   });
 });
 
