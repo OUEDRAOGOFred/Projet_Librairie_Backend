@@ -42,9 +42,9 @@ model Livre {
 
 model Emprunt {
   id             Int           @id @default(autoincrement())
-  utilisateur    Utilisateur   @relation(fields: [utilisateur_id], references: [id])
+  utilisateur    Utilisateur   @relation(fields: [utilisateur_id], references: [id], onDelete: Cascade)
   utilisateur_id Int
-  livre          Livre         @relation(fields: [livre_id], references: [id])
+  livre          Livre         @relation(fields: [livre_id], references: [id], onDelete: Cascade)
   livre_id       Int
   date_emprunt   DateTime      @default(now())
   date_retour    DateTime?
@@ -55,9 +55,9 @@ model Emprunt {
 
 model Commentaire {
   id               Int           @id @default(autoincrement())
-  utilisateur      Utilisateur   @relation(fields: [utilisateur_id], references: [id])
+  utilisateur      Utilisateur   @relation(fields: [utilisateur_id], references: [id], onDelete: Cascade)
   utilisateur_id   Int
-  livre            Livre         @relation(fields: [livre_id], references: [id])
+  livre            Livre         @relation(fields: [livre_id], references: [id], onDelete: Cascade)
   livre_id         Int
   commentaire      String?
   note             Int?

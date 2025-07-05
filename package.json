@@ -5,7 +5,7 @@
     "start": "bash start.sh",
     "dev": "nodemon server.js",
     "build": "npx prisma generate",
-    "migrate": "node prisma/migrate.js",
+    "migrate": "prisma migrate deploy",
     "add-books": "node addBooksWithPrisma.js",
     "create-admin": "node createAdmin.js",
     "postinstall": "npx prisma generate"
