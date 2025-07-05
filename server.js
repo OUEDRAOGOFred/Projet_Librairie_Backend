@@ -69,18 +69,24 @@ apiRoutes.delete('/users/:id', verifyToken, async (req, res) => {
   }
 });
 
-// Modifier le rôle d'un utilisateur (admin seulement)
+// Modifier un utilisateur (admin seulement)
 apiRoutes.patch('/users/:id', verifyToken, async (req, res) => {
   try {
-    console.log('PATCH /users/:id', { user: req.currUser, params: req.params, body: req.body });
     if (req.currUser.role !== 'admin') {
       return res.status(403).json({ error: true, message: "Accès refusé." });
     }
     const id = parseInt(req.params.id);
-    const { role } = req.body;
-    if (!id || !role) return res.status(400).json({ error: true, message: "ID ou rôle manquant" });
-    await prisma.utilisateur.update({ where: { id }, data: { role } });
-    res.json({ message: 'Rôle modifié' });
+    const { nom, prenom, email, role } = req.body;
+    if (!id) return res.status(400).json({ error: true, message: "ID manquant" });
+    // On construit dynamiquement les champs à modifier
+    const data = {};
+    if (nom) data.nom = nom;
+    if (prenom) data.prenom = prenom;
+    if (email) data.email = email;
+    if (role) data.role = role;
+    if (Object.keys(data).length === 0) return res.status(400).json({ error: true, message: "Aucune donnée à modifier" });
+    await prisma.utilisateur.update({ where: { id }, data });
+    res.json({ message: 'Utilisateur modifié' });
   } catch (error) {
     res.status(500).json({ error: true, message: error.message });
   }
