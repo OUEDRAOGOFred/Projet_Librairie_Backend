@@ -19,10 +19,10 @@ const findAllUsers = async (req, res) => {
         prenom: true,
         email: true,
         role: true,
-        created_at: true
+        date_inscription: true
       },
       orderBy: {
-        created_at: 'desc'
+        date_inscription: 'desc'
       }
     });
 
